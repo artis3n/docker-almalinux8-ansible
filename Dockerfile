@@ -28,7 +28,7 @@ RUN yum -y install rpm dnf-plugins-core \
       python3-pyyaml \
  && yum clean all
 
-RUN pip3 install --no-cache-dir --upgrade pip \
+RUN python3 -m pip install --no-cache-dir --upgrade pip \
      && pip3 install --no-cache-dir ansible
 
 # Disable requiretty.
