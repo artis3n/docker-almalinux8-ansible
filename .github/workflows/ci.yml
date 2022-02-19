@@ -1,0 +1,50 @@
+---
+name: Docker Image CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+env:
+  IMAGE_NAME: artis3n/docker-almalinux8-ansible
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: hadolint/hadolint-action@v1.6.0
+        with:
+          ignore: DL3003 DL3033 DL3059 DL3013 SC2039 SC2086
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Install Goss
+      uses: e1himself/goss-installation-action@v1.0.4
+      with:
+        version: 'v0.3.16'
+
+    - name: Build and Export
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        platforms: linux/amd64
+        push: false
+        load: true
+        tags: ${{ env.IMAGE_NAME }}:test
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Test the Docker image
+      run: dgoss run -it --rm --privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro ${{ env.IMAGE_NAME }}:test
