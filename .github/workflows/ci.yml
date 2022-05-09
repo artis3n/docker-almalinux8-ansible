@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: hadolint/hadolint-action@v1.6.0
+      - uses: hadolint/hadolint-action@v2.1.0
         with:
           ignore: DL3003 DL3033 DL3059 DL3013 SC2039 SC2086
 
