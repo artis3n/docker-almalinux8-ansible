@@ -26,6 +26,7 @@ RUN yum -y install rpm dnf-plugins-core \
       python3 \
       python3-pip \
       python3-pyyaml \
+      iproute \
  && yum clean all
 
 RUN python3 -m pip install --no-cache-dir --upgrade pip \
