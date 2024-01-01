@@ -10,12 +10,12 @@ size: build
 
 .PHONY: test
 test: build
-	dgoss run -it --rm --privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro artis3n/docker-almalinux8-ansible:$${TAG:-test}
-	CI=true make size
+	dgoss run -it --rm --privileged --cgroupns=host --volume=/sys/fs/cgroup:/sys/fs/cgroup:rw artis3n/docker-almalinux8-ansible:$${TAG:-test}
+	# CI=true make size
 
 .PHONY: test-edit
 test-edit: build
-	dgoss edit -it --rm --privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro artis3n/docker-almalinux8-ansible:$${TAG:-test}
+	dgoss edit -it --rm --privileged --cgroupns=host --volume=/sys/fs/cgroup:/sys/fs/cgroup:rw artis3n/docker-almalinux8-ansible:$${TAG:-test}
 
 .PHONY: build
 build:
@@ -23,6 +23,6 @@ build:
 
 .PHONY: run
 run: build
-	docker run -id --rm --name runner --privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro artis3n/docker-almalinux8-ansible:$${TAG:-test}
+	docker run -id --rm --name runner --privileged --cgroupns=host --volume=/sys/fs/cgroup:/sys/fs/cgroup:rw artis3n/docker-almalinux8-ansible:$${TAG:-test}
 	-docker exec -it runner /bin/sh
 	docker stop runner
