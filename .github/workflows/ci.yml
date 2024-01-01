@@ -28,7 +28,7 @@ jobs:
 
     - name: Set up Docker Buildx
       id: buildx
-      uses: docker/setup-buildx-action@v2
+      uses: docker/setup-buildx-action@v3
 
     - name: Install Goss
       uses: e1himself/goss-installation-action@v1.2.1
